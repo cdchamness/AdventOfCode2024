@@ -25,14 +25,15 @@ fn main() -> Result<()> {
             }
         }
     }
+    let topographical_map = Grid::new(input_grid);
+
+    // get trailheads
+    let trailheads = topographical_map.find_all('0');
 
     // Calculate score - Sum of ( unique summits / trailhead )
     let mut total_score = 0;
-    let topographical_map = Grid::new(input_grid);
-    let trailheads = topographical_map.find_all('0');
     for trailhead in trailheads.clone() {
-        let summit_locations: Vec<GridPoint> = find_all_summits(trailhead, &topographical_map);
-        total_score += summit_locations.len();
+        total_score += find_all_summits(trailhead, &topographical_map).len();
     }
     println!("Total Score: {}", total_score);
 
@@ -41,8 +42,7 @@ fn main() -> Result<()> {
     for trailhead in trailheads {
         // this should be the same as before, but we just include every path
         // so no skipping already visited locations or summits
-        let trailhead_rating = find_rating(trailhead, &topographical_map);
-        total_rating += trailhead_rating;
+        total_rating += find_rating(trailhead, &topographical_map);
     }
     println!("Total Rating: {}", total_rating);
 
